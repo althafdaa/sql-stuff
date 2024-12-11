@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/learn-pg/postgres:/var/lib/postgresql/data
+      - ./cars_retail_postgres.sql:/docker-entrypoint-initdb.d/cars_retail_postgres.sql
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=postgres
+      - PGUSER=user
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
+      interval: 10s
+      timeout: 5s
+      retries: 5
